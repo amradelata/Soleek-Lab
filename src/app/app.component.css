@@ -1,0 +1,76 @@
+.container{
+    width: 82%;
+    max-width: 1000px;
+    margin: auto;
+    padding-top: 30px;
+}
+
+.product-edit{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between
+}
+
+.product-edit input{
+    width: 32%;
+    padding: 15px 14px;
+	border-radius: 4px;
+	position: relative;
+    border: 1px solid #ccc;
+}
+
+label {
+    cursor: pointer;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.14s ease-out;
+}
+label:hover{
+    border: 2px dashed #555
+}
+label img{
+    width: 50px
+}
+ 
+#upload-photo {
+    display: none;
+}
+.btn{
+    border-radius: 3px;
+	border: none;
+	outline: none;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	color: #fff;
+	padding: 15px 75px;
+	font-size: 20px;
+    cursor: pointer;
+    background-color: #1f92ec;
+    margin: 25px auto 30px;
+    /* background: linear-gradient(122deg, rgba(23,57,230,1) 0%, rgba(23,230,230,1) 97%); */
+}
+
+.product{
+    text-align: center;
+    margin-top: 40px;
+}
+table, td, th {    
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+}
+
