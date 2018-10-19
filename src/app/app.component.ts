@@ -37,7 +37,11 @@ export class AppComponent {
     //   // console.log(x.target.result);
     //   this.selectedImageData = x.target.result;
     // };
-
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope) {
+      $scope.firstname = "John";
+      $scope.lastname = "Doe";
+    });
   }
   onClick() {
     this.products.push({
