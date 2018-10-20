@@ -7,70 +7,127 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
-
-
-
 export class AppComponent {
   title = 'SoleekLab';
+  // This var is used to store the list of products
   products: any[];
-  name: string;
 
-  // selectedImageData: string = '';
+  // These vars are used for two-way-data-binding
+  name: string = '';
+  category: string = '';
+  price: number = 0;
+
+  // This var is used to store the uploaded image name
   selectedImageName: string = '';
 
-  fileSelected(e) {
+  // Popups vars
+  isThePopOpen: boolean = false;
+  popupData: any = {};
 
+  // Edit related vars
+  editMode: boolean = false;
+  editFormData: any = {};
+
+  // This function will handle the selected image
+  fileSelected(e) {
     let fileInput = e.target;
     let image = fileInput.files[0]; // from this object you can access the filename and its size!
-    console.log(image);
+
     if (image === undefined) {
-      return false
+      return false;
     } else {
       this.selectedImageName = image.name;
     }
+  }
 
+  // Push the new product to the products array
+  saveProduct() {
+    const newProduct = {
+      id: this.generateRandomID(),
+      name: this.name,
+      category: this.category,
+      price: this.price,
+      date: new Date()
+    };
+    this.products.push(newProduct);
 
-    // var reader = new FileReader();
-    // reader.readAsDataURL(image)
-    // reader.onload = (x: any) => {
-    //   // console.log(x.target.result);
-    //   this.selectedImageData = x.target.result;
-    // };
-    var app = angular.module('myApp', []);
-    app.controller('myCtrl', function ($scope) {
-      $scope.firstname = "John";
-      $scope.lastname = "Doe";
+    // reset vars
+    this.name = '';
+    this.category = '';
+    this.price = 0;
+  }
+
+  generateRandomID() {
+    let x = Math.random();
+    x = x * 10000;
+    x = Math.floor(x);
+    return x;
+  }
+
+  deleteMe(id) {
+    let filteredArray = this.products.filter(product => {
+      if (id === product.id) {
+        return false;
+      } else {
+        return true;
+      }
     });
+    this.products = filteredArray;
   }
-  onClick() {
-    this.products.push({
 
+  openPopup(id) {
+    console.log('opening the popup ...');
+    this.isThePopOpen = true;
+    let selectedProduct = this.products.find(product => {
+      if (id === product.id) {
+        return true;
+      }
     });
+    this.popupData = selectedProduct;
   }
-  addProduct(product) {
-    console.log(product);
-    return false;
+
+  closePopup() {
+    this.isThePopOpen = false;
   }
+
+  editMe(id, e) {
+    e.stopPropagation();
+
+    this.editFormData = this.products.find(product => {
+      if (id === product.id) {
+        return true;
+      }
+    });
+    this.editMode = true;
+  }
+
+  closeEditMode() {
+    this.editMode = false;
+  }
+
   ngOnInit() {
     this.products = [
       {
-        id: 11111,
+        id: this.generateRandomID(),
         name: 'test 3',
         price: 22,
-        category: 'test category name 1'
+        category: 'test category name 1',
+        date: new Date()
       },
       {
-        id: 22222,
+        id: this.generateRandomID(),
         name: 'test',
         price: 10,
-        category: 'test category name 2 '
-      }, {
-        id: 33333,
+        category: 'test category name 2',
+        date: new Date()
+      },
+      {
+        id: this.generateRandomID(),
         name: 'test 2',
         price: 22,
-        category: 'test category name 3'
-      },
+        category: 'test category name 3',
+        date: new Date()
+      }
     ];
   }
 }
@@ -79,4 +136,3 @@ export class AppComponent {
 //   category:string;
 //   price:number;
 // }
-

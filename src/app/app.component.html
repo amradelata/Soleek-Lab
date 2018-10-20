@@ -1,50 +1,107 @@
 <div class="container">
 
-  <section class="product-edit">
-    <input type="name" placeholder="Name">
-    <input type="category" placeholder="Category">
-    <input type="number" placeholder="Price">
-
-
+  <!-- New Product Form -->
+  <section class="product-form" *ngIf="editMode === false">
+    <input type="name" [(ngModel)]="name" placeholder="Name">
+    <input type="category" [(ngModel)]="category" placeholder="Category">
+    <input type="number" [(ngModel)]="price" placeholder="Price">
 
     <label for="upload-photo">
-      <!-- <img [src]="selectedImageData" class="selectedImage" *ngIf="selectedImageData.length > 0"> -->
-      <!-- *ngIf="selectedImageData.length === 0" -->
       <img src="assets/upload.svg">
       <h3>{{selectedImageName}}</h3>
     </label>
     <input type="file" name="photo" id="upload-photo" accept="image/*" (change)="fileSelected($event)" />
-    <button class="btn" (click)="onClick()">Save product</button>
+
+    <button class="btn" (click)="saveProduct()">Save product</button>
   </section>
+
+
+
+
+
+
+
+
+
+  <!-- Edit Product Form -->
+  <section class="product-form edit-form" *ngIf="editMode === true">
+    <input type="name" [(ngModel)]="editFormData.name" placeholder="Name">
+    <input type="category" [(ngModel)]="editFormData.category" placeholder="Category">
+    <input type="number" [(ngModel)]="editFormData.price" placeholder="Price">
+
+    <label for="upload-photo">
+      <img src="assets/upload.svg">
+      <h3>{{selectedImageName}}</h3>
+    </label>
+    <input type="file" name="photo" id="upload-photo" accept="image/*" (change)="fileSelected($event)" />
+
+    <button class="btn close-edit" (click)="closeEditMode()">Cancel</button>
+  </section>
+
+
+
+
+
+
 
   <section class="product">
     <h1>Products</h1>
     <table>
       <tr>
         <th>#</th>
+        <th>ID</th>
         <th>Name</th>
         <th>Category</th>
         <th>Price</th>
+        <th>Delete</th>
         <th>Edit</th>
       </tr>
-      <tr *ngFor="let product of products; let i = index;">
+      <tr *ngFor="let product of products; let i = index;" class="product-row" (click)="openPopup(product.id)">
         <td>{{i + 1}}</td>
+        <td>{{product.id}}</td>
         <td>{{product.name}}</td>
         <td>{{product.category}}</td>
         <td>{{product.price}}</td>
-        <td><button>X</button></td>
+        <td>
+          <button (click)="deleteMe(product.id)">X</button>
+        </td>
+        <td>
+          <button (click)="editMe(product.id, $event)">edit</button>
+        </td>
       </tr>
-      <!-- <tr>
-          <td>Centro comercial Moctezuma</td>
-          <td>Francisco Chang</td>
-          <td>50</td>
-          <td><button>X</button></td>
-        </tr> -->
     </table>
   </section>
 </div>
 
-<div ng-app="myApp" ng-controller="myCtrl">
-  Name: <input ng-model="firstname">
-  <h1>{{firstname}}</h1>
+
+
+<div class="popup-parent" *ngIf="isThePopOpen === true">
+  <div class="popup">
+    <span class="close" (click)="closePopup()">X</span>
+    <img src="assets/image.jpg">
+    <h3>Product Details</h3>
+
+    <table>
+      <tr>
+        <td>Name</td>
+        <td>{{popupData.name}}</td>
+      </tr>
+      <tr>
+        <td>Category</td>
+        <td>{{popupData.category}}</td>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td>{{popupData.price}}</td>
+      </tr>
+      <tr>
+        <td>ID</td>
+        <td>{{popupData.id}}</td>
+      </tr>
+      <tr>
+        <td>Date</td>
+        <td>{{popupData.date}}</td>
+      </tr>
+    </table>
+  </div>
 </div>
