@@ -1,8 +1,21 @@
 .container {
   width: 82%;
   max-width: 1000px;
-  margin: auto;
+  margin: 30px auto;
   padding-top: 30px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+h1 {
+  font-weight: 100;
+  font-size: 35px;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .product-form {
@@ -31,6 +44,7 @@ label {
   margin-top: 20px;
   text-align: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   transition: 0.14s ease-out;
@@ -42,6 +56,10 @@ label img {
   width: 50px;
 }
 
+label img.selected-image {
+  width: 100px;
+  border-radius: 5px;
+}
 #upload-photo {
   display: none;
 }
@@ -49,7 +67,6 @@ label img {
   border-radius: 3px;
   border: none;
   outline: none;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
   padding: 15px 75px;
   font-size: 20px;
@@ -70,6 +87,10 @@ th {
   text-align: left;
 }
 
+th.text-center {
+  text-align: center;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -78,6 +99,25 @@ table {
 th,
 td {
   padding: 15px;
+}
+
+td > button {
+  width: 100%;
+  padding: 5px 10px;
+  background-color: #1f92ec;
+  border: 0;
+  border-radius: 3px;
+  height: 40px;
+  cursor: pointer;
+}
+td > button > img {
+  width: 20px;
+}
+td > button.edit {
+  background-color: #f39c12;
+}
+td > button.delete {
+  background-color: #e74c3c;
 }
 .product-row {
   cursor: pointer;
@@ -101,8 +141,7 @@ td {
   width: 600px;
   max-width: 100%;
   position: absolute;
-  top: 100px;
-  left: 50%;
+   left: 50%;
   transform: translate(-50%, 0);
   padding: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -122,4 +161,125 @@ td {
   font-size: 30px;
   opacity: 0.4;
   cursor: pointer;
+}
+
+/* Confirm Delete */
+.confirm-delete {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 600px;
+  max-width: 100%;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+.confirm-delete h3 {
+  font-weight: 100;
+}
+.confirm-delete h3 b {
+  font-weight: bold;
+}
+.confirm-delete button {
+  padding: 10px 15px;
+  border: 0;
+  color: #fff;
+  border-radius: 3px;
+  background-color: #ccc;
+  margin-right: 15px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.confirm-delete button.yes {
+  background-color: #e74c3c;
+}
+.confirm-delete button.no {
+  background-color: #1f92ec;
+}
+
+/* Alert */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* Force table to not be like tables anymore */
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .hide-in-mobile {
+    display: none;
+  }
+
+  tr {
+    border: 1px solid #ccc;
+  }
+
+  td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  /*
+	Label the data
+	*/
+  td:nth-of-type(1):before {
+    content: '#';
+  }
+  td:nth-of-type(2):before {
+    content: 'ID';
+  }
+  td:nth-of-type(3):before {
+    content: 'Name';
+  }
+  td:nth-of-type(4):before {
+    content: 'Category';
+  }
+  td:nth-of-type(5):before {
+    content: 'Price';
+  }
+  td:nth-of-type(6):before {
+    content: 'Delete';
+  }
+  td:nth-of-type(7):before {
+    content: 'Edit';
+  }
 }

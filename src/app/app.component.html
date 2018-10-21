@@ -1,5 +1,11 @@
 <div class="container">
 
+  <div class="alert alert-danger" *ngIf="showAlert === true">
+    <strong>Oh snap!</strong>
+    All the fields are needed!
+  </div>
+
+
   <!-- New Product Form -->
   <section class="product-form" *ngIf="editMode === false">
     <input type="name" [(ngModel)]="name" placeholder="Name">
@@ -7,8 +13,8 @@
     <input type="number" [(ngModel)]="price" placeholder="Price">
 
     <label for="upload-photo">
-      <img src="assets/upload.svg">
-      <h3>{{selectedImageName}}</h3>
+      <img src="{{selectedImageData}}" class="selected-image">
+      <img src="assets/upload.svg" *ngIf="selectedImageData.length === 0">
     </label>
     <input type="file" name="photo" id="upload-photo" accept="image/*" (change)="fileSelected($event)" />
 
@@ -30,10 +36,15 @@
     <input type="number" [(ngModel)]="editFormData.price" placeholder="Price">
 
     <label for="upload-photo">
-      <img src="assets/upload.svg">
-      <h3>{{selectedImageName}}</h3>
+      <div *ngIf="editFormData.image">
+        <img src="{{editFormData.image}}" class="selected-image">
+        <img src="assets/upload.svg" *ngIf="editFormData.image.length === 0">
+      </div>
+      <h5 *ngIf="!editFormData.image">
+        Sorry, This product has no image!
+      </h5>
     </label>
-    <input type="file" name="photo" id="upload-photo" accept="image/*" (change)="fileSelected($event)" />
+    <input type="file" name="photo" id="upload-photo" accept="image/*" (change)="updateImage($event)" />
 
     <button class="btn close-edit" (click)="closeEditMode()">Cancel</button>
   </section>
@@ -47,26 +58,30 @@
   <section class="product">
     <h1>Products</h1>
     <table>
-      <tr>
+      <tr class="hide-in-mobile">
         <th>#</th>
         <th>ID</th>
         <th>Name</th>
         <th>Category</th>
-        <th>Price</th>
-        <th>Delete</th>
-        <th>Edit</th>
+        <th class="text-center">Price</th>
+        <th class="text-center">Edit</th>
+        <th class="text-center">Delete</th>
       </tr>
       <tr *ngFor="let product of products; let i = index;" class="product-row" (click)="openPopup(product.id)">
         <td>{{i + 1}}</td>
         <td>{{product.id}}</td>
         <td>{{product.name}}</td>
         <td>{{product.category}}</td>
-        <td>{{product.price}}</td>
-        <td>
-          <button (click)="deleteMe(product.id)">X</button>
+        <td class="text-center">{{product.price}} EGP</td>
+        <td class="text-center">
+          <button class="edit" (click)="editMe(product.id, $event)">
+            <img src="assets/edit.svg">
+          </button>
         </td>
-        <td>
-          <button (click)="editMe(product.id, $event)">edit</button>
+        <td class="text-center">
+          <button class="delete" (click)="deleteMe(product.id, $event)">
+            <img src="assets/delete.svg">
+          </button>
         </td>
       </tr>
     </table>
@@ -78,7 +93,12 @@
 <div class="popup-parent" *ngIf="isThePopOpen === true">
   <div class="popup">
     <span class="close" (click)="closePopup()">X</span>
-    <img src="assets/image.jpg">
+
+    <img src="{{popupData.image}}">
+
+    <img src="assets/default.jpg" *ngIf="!popupData.image">
+
+
     <h3>Product Details</h3>
 
     <table>
@@ -103,5 +123,16 @@
         <td>{{popupData.date}}</td>
       </tr>
     </table>
+  </div>
+</div>
+
+
+
+<div class="popup-parent" *ngIf="isTheConfirmOpen === true">
+  <div class="confirm-delete">
+    <h3>Are you sure you want to delete <b>{{confirmData.name}}</b>?</h3>
+
+    <button class="yes" (click)="delete(confirmData.id)">Yes</button>
+    <button class="no" (click)="closeConfirm()">No</button>
   </div>
 </div>

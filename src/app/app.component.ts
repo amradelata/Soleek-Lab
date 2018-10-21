@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -18,43 +19,85 @@ export class AppComponent {
   price: number = 0;
 
   // This var is used to store the uploaded image name
-  selectedImageName: string = '';
-
+  selectedImageData: string = '';
   // Popups vars
   isThePopOpen: boolean = false;
   popupData: any = {};
+
+  // Confirm vars
+  isTheConfirmOpen: boolean = false;
+  confirmData: any = {};
 
   // Edit related vars
   editMode: boolean = false;
   editFormData: any = {};
 
+  // Alert
+  showAlert: boolean = false;
+
   // This function will handle the selected image
   fileSelected(e) {
     let fileInput = e.target;
-    let image = fileInput.files[0]; // from this object you can access the filename and its size!
+    let image = fileInput.files[0];
 
     if (image === undefined) {
       return false;
     } else {
-      this.selectedImageName = image.name;
+      var reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = (x: any) => {
+        this.selectedImageData = x.target.result;
+      };
+    }
+  }
+
+  updateImage(e) {
+    let fileInput = e.target;
+    let image = fileInput.files[0];
+
+    if (image === undefined) {
+      return false;
+    } else {
+      var reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = (x: any) => {
+        this.editFormData.image = x.target.result;
+      };
     }
   }
 
   // Push the new product to the products array
   saveProduct() {
-    const newProduct = {
-      id: this.generateRandomID(),
-      name: this.name,
-      category: this.category,
-      price: this.price,
-      date: new Date()
-    };
-    this.products.push(newProduct);
+    // Validate data!
+    if (
+      this.name === '' ||
+      this.category === '' ||
+      this.price === 0 ||
+      this.selectedImageData === ''
+    ) {
+      this.showAlert = true;
 
-    // reset vars
-    this.name = '';
-    this.category = '';
-    this.price = 0;
+      setTimeout(() => {
+        this.showAlert = false;
+      }, 3000);
+    } else {
+      const newProduct = {
+        id: this.generateRandomID(),
+        name: this.name,
+        category: this.category,
+        price: this.price,
+        image: this.selectedImageData
+
+      };
+      this.products.push(newProduct);
+
+      // reset vars
+      this.name = '';
+      this.category = '';
+      this.price = 0;
+      this.selectedImageData = '';
+      this.showAlert = false;
+    }
   }
 
   generateRandomID() {
@@ -64,7 +107,17 @@ export class AppComponent {
     return x;
   }
 
-  deleteMe(id) {
+  deleteMe(id, e) {
+    e.stopPropagation();
+    this.isTheConfirmOpen = true;
+    this.confirmData = this.products.find(product => {
+      if (id === product.id) {
+        return true;
+      }
+    });
+  }
+
+  delete(id) {
     let filteredArray = this.products.filter(product => {
       if (id === product.id) {
         return false;
@@ -73,10 +126,10 @@ export class AppComponent {
       }
     });
     this.products = filteredArray;
+    this.isTheConfirmOpen = false;
   }
 
   openPopup(id) {
-    console.log('opening the popup ...');
     this.isThePopOpen = true;
     let selectedProduct = this.products.find(product => {
       if (id === product.id) {
@@ -88,6 +141,9 @@ export class AppComponent {
 
   closePopup() {
     this.isThePopOpen = false;
+  }
+  closeConfirm() {
+    this.isTheConfirmOpen = false;
   }
 
   editMe(id, e) {
@@ -131,8 +187,4 @@ export class AppComponent {
     ];
   }
 }
-// interface products{
-//   name:string;
-//   category:string;
-//   price:number;
-// }
+
